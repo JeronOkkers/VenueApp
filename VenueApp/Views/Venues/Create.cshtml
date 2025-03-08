@@ -5,47 +5,60 @@
 }
 
 <h1 class="mt-4">Create Venue</h1>
-
 <hr />
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Venue Name</label>
-                <input asp-for="Name" class="form-control" placeholder="Enter venue name" />
+                <input asp-for="Name" class="form-control" placeholder="Enter venue name" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Address" class="control-label">Address</label>
-                <input asp-for="Address" class="form-control" placeholder="Enter address" />
+                <input asp-for="Address" class="form-control" placeholder="Enter address" required />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="City" class="control-label">City</label>
-                <input asp-for="City" class="form-control" placeholder="Enter city" />
+                <input asp-for="City" class="form-control" placeholder="Enter city" required />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="State" class="control-label">State</label>
-                <input asp-for="State" class="form-control" placeholder="Enter state" />
+                <input asp-for="State" class="form-control" placeholder="Enter state" required />
                 <span asp-validation-for="State" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="ZipCode" class="control-label">Zip Code</label>
-                <input asp-for="ZipCode" class="form-control" placeholder="Enter zip code" />
+                <input asp-for="ZipCode" class="form-control" placeholder="Enter zip code" required />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label class="control-label">Venue Image</label>
-                <input type="file" name="ImageFile" class="form-control-file" accept="image/*" />
+                <input type="file" id="imageFile" name="imageFile" class="form-control-file" accept="image/*" onchange="previewImage(event)" />
+
+                @if (!string.IsNullOrEmpty(Model?.ImageUrl))
+                {
+                    <div class="mt-2">
+                        <img id="imagePreview" src="@Model.ImageUrl" alt="Venue Image" class="img-thumbnail" width="150" />
+                    </div>
+                }
+                else
+                {
+                    <div class="mt-2">
+                        <img id="imagePreview" src="/images/default.jpg" alt="Venue Image" class="img-thumbnail" width="150" />
+                    </div>
+                }
+
                 <small class="text-muted">Upload an image of the venue</small>
             </div>
 
@@ -58,6 +71,17 @@
 </div>
 
 @section Scripts {
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

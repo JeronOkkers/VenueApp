@@ -21,7 +21,7 @@ namespace VenueApp.Models
         public string State { get; set; }
 
         [StringLength(10)]
-        public string ZipCode { get; set; }
+        public string ZipCode { get; set; }    
 
         public string ImageUrl { get; set; }
     }
